@@ -1,0 +1,84 @@
+\scriptsize
+\begin{tikzpicture}
+  \def\Tiny{\fontsize{6pt}{6pt}\selectfont}
+  \newdimen\newx
+  \newdimen\newy
+  \pgfmathsetlength\newx{\width / 8}
+  \pgfmathsetlength\newy{(\height - 2) / 25}
+  \renewcommand{\dispevent}[8]
+  {
+    \ifthenelse{\equal{#7}{}}{}{
+      \newdimen\timespandimen
+      \parseTime{#7}
+      \edef\timeone{\pgfmathresult}
+      \ifthenelse{\equal{#8}{}}{\parseTime{#7}\pgfmathparse{\pgfmathresult+1}}{\parseTime{#8}}
+      \edef\timetwo{\pgfmathresult}
+      \pgfmathsetlength\timespandimen{(\timetwo - \timeone) * \newy}
+      \begin{scope}
+        \clip (-1, -\timeone) rectangle ++(\pgfcalendarcurrentweekday+3,-\timespandimen);
+        \draw (\pgfcalendarcurrentweekday, -\timeone) rectangle ++(1,-\timespandimen+0.1pt);
+        \draw (\pgfcalendarcurrentweekday, -\timeone) node [draw=none, minimum height=\timespandimen, fill=yellow, fill opacity=0.4, text
+        opacity=1] {#5};
+      \end{scope}
+    }
+  }
+
+    % \ifthenelse{\equal{#7}{}}{}
+    % {\draw (\pgfcalendarcurrentweekday, \parsetime{#7}) node [minimum height=1*\newy, fill=red!80] {};}
+
+  \begin{scope}[x=\newx, y=\newy]
+    \tikzstyle{thefill}=[]
+    \tikzstyle{every node}=[text width=\newx, text centered, minimum height=\newy, thefill]
+    \foreach \day in {-1, 0,..., 6}
+    {
+      \foreach \time in {-1, 0,..., 23}
+        {
+          \ifodd \day \def\filltime{white}\else\def\filltime{green}\fi
+          \ifodd \time \edef\filltime{\filltime}\else\def\filltime{blue}\fi
+          \tikzstyle{thefill}=[fill=\filltime!10]
+          \draw (\day, -\time) node {\ifthenelse{\time < 0} {\shortweekday{\day}}
+          {\ifthenelse{\day < 0}{\time:00}{}}};
+        }
+        \ifthenelse{\day < 0}{}{\draw [white, ultra thick] (\day, 1) -- (\day, -24);}
+    }
+    \tikzstyle{thefill}=[draw=black]
+    \Tiny
+    \foreach \x in {0, 2, 4}
+    {\draw (\x, -13) node [minimum height=1*\newy, fill=black!20] {Stat 134};
+      \draw (\x, -14) node [minimum height=1*\newy, fill=red!20] {Ling 100};}
+    \foreach \x in {0, 2} 
+    {\draw (\x, -16) node [minimum height=1.5*\newy, fill=purple!20] {CS 162};}
+
+    \foreach \x in {1, 3}
+    {
+      \draw (\x, -12.5) node [minimum height=1.5*\newy, fill=green!20] {CS 188};
+      \draw (\x, -14) node [minimum height=1.5*\newy, fill=blue!20] {Psych 128};
+    }
+
+    \draw (1, -9) node [minimum height=1*\newy, fill=red!20] {Ling Dis};
+    \draw (1, -10) node [minimum height=1*\newy, fill=purple!20] {CS162 Dis};
+    \draw (2, -15) node [minimum height=1*\newy, fill=green!20] {CS188 Dis};
+
+
+    % \foreach \x in {1, 3}{
+    % \draw (\x, -11) node [minimum height=1*\newy, fill=gray!20] {117};
+    % \draw (\x, -8) node [minimum height=1.5*\newy, fill=green!20] {110};
+    % \draw (\x, -9.5) node [minimum height=1.5*\newy, fill=blue!20] {MCB};
+    % \draw (\x, -14) node [minimum height=1.5*\newy, fill=orange!20] {HofI};}
+
+    % \draw (0, -13) node [minimum height=1*\newy, fill=blue!20] {MCB Dis};
+    % \draw (3, -13) node [minimum height=1*\newy, fill=gray!20] {117 Dis};
+    % \draw (2, -8) node [minimum height=1*\newy, fill=green!20] {110 Dis};
+    
+    \pgfcalendar{cal}{\weekstart}{\weekstart+6}
+    {
+      \disptoday
+    }
+
+  \end{scope}
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

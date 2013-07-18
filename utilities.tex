@@ -1,0 +1,138 @@
+\newcommand{\reminder}[8]{}     %dummy command, gets renewed 
+\newcommand{\blah}[1]{}       %more dummies
+
+\newcommand{\dummybirthday}[4]{}
+
+\newcommand{\shortweekday}[1]%
+{%
+\ifthenelse{\equal{#1}{0}}{M}{}%
+\ifthenelse{\equal{#1}{1}}{Tu}{}%
+\ifthenelse{\equal{#1}{2}}{W}{}%
+\ifthenelse{\equal{#1}{3}}{Th}{}%
+\ifthenelse{\equal{#1}{4}}{F}{}%
+\ifthenelse{\equal{#1}{5}}{Sa}{}%
+\ifthenelse{\equal{#1}{6}}{Su}{}%
+}
+
+% Key/Value pairs for events
+\gdef\setkey#1{\expandafter\gdef\csname myarray(#1)\endcsname} 
+\gdef\dispkeyval#1{\csname myarray(#1)\endcsname}
+
+\let\ea=\expandafter            %Don't overwrite this
+\newcommand{\appendtokey}[2]
+{
+  % I swear if this ever breaks I'll have no idea how to fix it
+  % Also this is ugly as hell, but I can't find a better way to do it
+  \ea\ea\ea\def\ea\ea\ea\nameofarray\ea\ea\ea{\dispkeyval{#1}}
+  \ea\ea\ea\def\ea\ea\ea\valueofarray\ea\ea\ea{\nameofarray}
+  \ea\def\ea\newvalueofarray\ea{\valueofarray #2}
+  \ea\ea\ea\gdef\ea\nameofarray\ea{\newvalueofarray}
+}
+
+\newcommand{\addtokey}[2]
+{
+  \ifcsname myarray(#1)\endcsname
+  \appendtokey{#1}{#2}
+  \else
+  \setkey{#1}{#2}
+  \fi
+}
+
+
+\newcommand{\formattime}[2]
+{\texttt{\ifthenelse{\equal{#1}{}}{}{[#1\ifthenelse{\equal{#2}{}}{}{-#2}]}}}
+
+\def\timetounits(#1:#2){%
+  \def\a{#1}
+  \def\b{#2}
+  % a is \a\\
+  % b is \b\\
+  \pgfmathparse{\a + (\b/60)}
+}
+\newcommand{\parseTime}[1]
+{\expandafter\timetounits(#1)}
+\def\parsetime{\parseTime}
+
+\newcommand{\dispevent}[8]{}
+\def\displesserevent{\dispevent}
+\def\dispweekreminder{\dispevent}
+
+\newcommand{\disptoday}{\dispkeyval{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}}
+
+\renewcommand{\reminder}[8]
+{\pgfcalendar{cal}{#1-#2-#3}{#1-#2-#3}{ %Just to check for correct zero padding
+    \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\dispevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}}
+
+\newcommand{\lesserreminder}[8]
+{\pgfcalendar{cal}{#1-#2-#3}{#1-#2-#3}{ %Just to check for correct zero padding
+    \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\displesserevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}}
+% reminder
+% weekrmdr
+\newcommand{\weekrmdr}[8]
+{\pgfcalendar{cal}{#1-#2-#3}{#1-#2-#3}{ %Just to check for correct zero padding
+    \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\dispweekreminder{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}}
+
+\newcommand{\birthday}[4]       %birthday command
+{\pgfcalendar{cal}{\weekyear-#1-#2}{\weekyear-#1-#2}{ %Just to check for correct zero padding
+    \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\displesserevent{\weekyear}{#1}{#2}{#3}{#3's birthday \ifthenelse{\equal{#4}{}}{}{%
+    \newcount\yearsold
+    \yearsold=\weekyear
+    \advance\yearsold by -#4
+    - \the\yearsold}}
+{\ifthenelse{\equal{#4}{}}{}{(#4)}}{}{}}}}
+
+% \renewcommand{\reminder}[8]
+% {\addtokey{events-#1-#2-#3}{\dispevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}
+
+
+\newcounter{loopindex}
+\newcounter{calyposition}
+\newcounter{weekypos}
+\newcounter{weekxpos2}
+\newcounter{weekypos2}
+
+\newcount\julianday
+\newcount\weekday
+\pgfcalendardatetojulian{\theyear-\themonth-\theday}{\julianday}
+\pgfcalendarjuliantoweekday{\the\julianday}{\weekday}
+\ifnum\weekday>4\relax%
+        \advance\weekday by -7\fi
+\advance\julianday by -\the\weekday
+\pgfcalendarjuliantodate{\the\julianday}{\weekyear}{\weekmonth}{\weekday}
+\edef\weekstart{\weekyear-\weekmonth-\weekday}
+\edef\weekjulianday{\the\julianday}
+
+
+\newcount\anothertemp
+\pgfcalendardatetojulian{\weekstart+3}{\julianday}
+\pgfcalendarjuliantodate{\the\julianday}{\tempyear}{\tempmonth}{\tempday}
+\pgfcalendardatetojulian{\tempyear-01-04}{\julianday}
+\pgfcalendarjuliantoweekday{\the\julianday}{\anothertemp}
+\advance\julianday by -\the\anothertemp
+\edef\weekzeroday{\the\julianday}
+\julianday=\weekjulianday
+\advance\julianday by -\weekzeroday
+\divide\julianday by 7
+\advance\julianday by 1
+\ifthenelse{\the\julianday < 10}{\edef\weeknum{0\the\julianday}}{\edef\weeknum{\the\julianday}}
+
+\newcommand{\ordinaldate}[2]    %Julian date, year
+{
+  \newcount\julianday
+  \pgfcalendardatetojulian{#2-01-01}{\julianday}
+  \edef\startofyear{\the\julianday}
+  \julianday = #1
+  \advance\julianday by -\startofyear
+  \advance\julianday by 1
+  \edef\firstord{\the\julianday}
+  \pgfcalendardatetojulian{#2-12-31}{\julianday}
+  \advance\julianday by -#1
+  \edef\secondord{\the\julianday}
+}
+
+\newlength{\weekxpos}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

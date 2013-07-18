@@ -1,0 +1,78 @@
+\scriptsize
+\begin{tikzpicture}
+  % Sync, Immed?, Date(or day of week), Amount, Credit Subtotal
+  \def\Tiny{\fontsize{6pt}{6pt}\selectfont}
+  \Tiny
+  \newdimen\calcwidth
+  % \newcount\somecount
+  % \somecount=0
+  % \foreach \oldcount/\cellwidth in {0/20, 1/30, 2/30, 3/20} {
+  %   \somecount=\oldcount
+  %   \advance\somecount by 1
+  %   \pgfmathsetlength\calcwidth{\width / 100 * \cellwidth}
+  %   \tikzstyle{ournode}=[text width=\calcwidth, draw, anchor=west, minimum height=0.5cm]
+  %   \ifthenelse{\oldcount = 0}
+  %   {\draw (0,0) node (somenode\the\somecount) [ournode] {FUCK\the\somecount};}
+  %   {\draw (somenode\oldcount.east) node (somenode\the\somecount) [ournode] {dude\oldcount};}
+  % }
+
+  \newcommand{\calccolwidth}[3]
+  {
+    \pgfmathsetlength\calcwidth{\width / 100 * #2}
+    \edef#3{\the\calcwidth}
+    \tikzstyle{column #1}=[nodes={text width=#3}]
+  }
+  \calccolwidth{1}{05}{\blaha}
+  \calccolwidth{2}{04}{\blahb}
+  \calccolwidth{3}{20}{\blahc}
+  \calccolwidth{4}{40}{\blahd}
+  \calccolwidth{5}{15}{\blahe}
+  \calccolwidth{6}{15}{\blahf}
+
+  \matrix [matrix of nodes, execute at empty cell=\node{};, nodes={text centered, draw, minimum height=5.25mm, anchor=north west}]{
+     &  & Date & Info & Amount & Subtotal \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\\hline
+     &  &      &      &        &          \\
+   };
+
+  % \newdimen\newx
+  % \newdimen\newy
+  % \pgfmathsetlength\newx{\width / 8}
+  % \pgfmathsetlength\newy{(\height - 2) / 25}
+  % \begin{scope}[x=\newx, y=\newy]
+  %   \tikzstyle{thefill}=[]
+  %   \tikzstyle{every node}=[text width=\newx, text centered, minimum height=\newy, thefill]
+  %   \foreach \day in {-1, 0,..., 6}
+  %   {
+  %     \foreach \time in {-1, 0,..., 23}
+  %       {
+  %         \ifodd \day \def\filltime{white}\else\def\filltime{green}\fi
+  %         \ifodd \time \edef\filltime{\filltime}\else\def\filltime{blue}\fi
+  %         \tikzstyle{thefill}=[fill=\filltime!10]
+  %         \draw (\day, -\time) node {\ifthenelse{\time < 0} {\shortweekday{\day}}
+  %         {\ifthenelse{\day < 0}{\time:00}{}}};
+  %       }
+  %       \ifthenelse{\day < 0}{}{\draw [white, ultra thick] (\day, 1) -- (\day, -24);}
+  %   }
+  % \end{scope}
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

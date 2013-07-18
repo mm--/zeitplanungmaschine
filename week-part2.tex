@@ -1,0 +1,65 @@
+\scriptsize
+    \begin{tikzpicture}
+      \def\Tiny{\fontsize{8pt}{8pt}\selectfont}
+      \pgfmathsetlength\width{\width - 2pt}
+      \tikzstyle{eventwidth}=[text width=\width]
+      \tikzstyle{eventstyle}=[color=black, eventwidth]
+
+      \newcount\eventcount
+      \newcount\temp
+      \renewcommand{\blah}[1]
+      {
+        \edef\argh{eventtwo\pgfcalendarcurrentday-\the\eventcount}
+        \advance\eventcount by 1
+        \ifthenelse{\equal{\the\eventcount}{1}}
+        {  \draw (eventtwo\pgfcalendarcurrentday.south west) ++ (0, -4pt) node (eventtwo\pgfcalendarcurrentday-\the\eventcount) [eventstyle] {#1};}
+        {  \draw (\argh.south) ++(0, -2pt) node (eventtwo\pgfcalendarcurrentday-\the\eventcount) [anchor=north, eventstyle] {#1};}%
+      }
+
+      \renewcommand{\reminder}[8]
+      {
+        \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
+        \ifdate{equals={#1}-{#2}-{#3}}
+        {
+          \blah{#5 \Tiny{#6}}
+        }{}
+      }
+
+
+      \setcounter{weekypos2}{0}
+      \setcounter{weekxpos2}{0}
+      \newdimen\halfwidth
+      \pgfmathsetlength\halfwidth{\width / 2}
+
+      \pgfcalendar{cal}{\weekstart+3}{\weekstart+6}
+                  {%
+                    \leavevmode%
+                    \let\%=\pgfcalendarshorthand
+                    \ordinaldate{\pgfcalendarcurrentjulian}{\pgfcalendarcurrentyear}
+                    \ifdate{workday}
+                    {\tikzstyle{daywidth}=[text width=\width]
+                      \tikzstyle{eventwidth}=[text width=\width]}                   
+                    {\tikzstyle{daywidth}=[text width=\halfwidth]
+                      \tikzstyle{eventwidth}=[text width=\halfwidth]}                   
+                    \ifdate{Sunday}
+                    {
+                    \addtocounter{weekxpos2}{93}
+                    }
+                    {\addtocounter{weekypos2}{-3}}
+
+                    \draw (\value{weekxpos2}pt, \value{weekypos2}) node (eventtwo\pgfcalendarcurrentday) [daylabel, daywidth] 
+                      {\%wt --- \%m. \%d0 \ifdate{workday}{}{\\}(\firstord/\secondord)};
+
+                      \ifdate{Sunday}{
+                        \draw (\value{weekxpos2}pt, \value{weekypos2}) -- (\value{weekxpos2}pt, \value{weekypos2}-4.5);}{}
+
+                    \eventcount=0
+                    % \input{dates.tex}
+                  }
+
+    \end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

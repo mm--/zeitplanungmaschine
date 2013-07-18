@@ -1,0 +1,23 @@
+\normalsize
+\begin{tikzpicture}
+\newdimen\halfwidth
+\pgfmathsetlength\halfwidth{\width / 2}
+\newdimen\halfwidthminus
+\pgfmathsetlength\halfwidthminus{\halfwidth - 5pt} %
+\draw (0,0) node [text width=\width, text centered]{
+  \vspace{0.7em}
+  \textbf{Todo}
+};
+\foreach \x in {0, \halfwidth}{
+\draw (\x,-20pt) node [text width=\halfwidthminus, text centered]{
+  \setcounter{loopindex}{0}
+  \forloop[1]{loopindex}{0}{\value{loopindex} < 19}{
+  \ding{113} \hrulefill\\
+  }
+};}
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

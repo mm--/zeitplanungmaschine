@@ -1,0 +1,39 @@
+\def\Tiny{\fontsize{6pt}{6pt}\selectfont}
+\scriptsize
+\begin{tikzpicture}
+\useasboundingbox (0, 0) rectangle (\width, -\height);
+\draw (0,0) node [text width=\width, text centered] {\textbf{Later dates}};
+
+\tikzstyle{eventstyle}=[text width = \width]
+\let\%=\pgfcalendarshorthand
+\newcount\eventcount
+\newcount\temp
+\renewcommand{\blah}[1]
+{
+  \edef\argh{event\the\eventcount}
+  \advance\eventcount by 1
+  \ifthenelse{\equal{\the\eventcount}{1}}
+  {  \draw (0,-10pt) node (event\the\eventcount) [eventstyle] {#1};}
+  {  \draw (\argh.south) ++(0, -1pt) node (event\the\eventcount) [anchor=north, eventstyle] {#1};}%
+}
+\def\displesserevent{}             %Don't display lesser events like birthdays
+\def\dispweekreminder{}             %Don't display small events
+
+\renewcommand{\dispevent}[8]
+{
+  \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
+  \blah{\texttt{\%{m}{.}.\%{d}{0} (\%{w}{.}) --} #5 \formattime{#7}{#8}}
+}
+
+\pgfcalendar{cal}{\weekstart+34}{\weekstart+365}
+{
+  \let\birthday=\dummybirthday
+  \Tiny
+  \disptoday
+}
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

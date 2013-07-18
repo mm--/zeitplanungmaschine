@@ -1,0 +1,32 @@
+\scriptsize
+\begin{tikzpicture}
+  \newdimen\newwidth
+  \pgfmathsetlength\newwidth{\width / 9}
+  % \tikzstyle{every odd column}=[nodes={fill=black!10}]
+  \tikzstyle{blah}=[nodes={fill=black!10}]
+  \tikzstyle{column 1}=[blah]
+  \tikzstyle{column 3}=[blah]
+  \tikzstyle{column 5}=[blah]
+  \tikzstyle{column 7}=[blah]
+  \tikzstyle{column 8}=[nodes={fill=red!10}]
+  \tikzstyle{column 9}=[nodes={fill=green!10}]
+  % \tikzstyle{every odd column}=[nodes={color=green, text=black}]
+  \matrix [matrix of nodes, execute at empty cell=\node{};, nodes={text centered, text width=\newwidth, minimum height=9.25mm, anchor=north west}]{
+    Goal   & M & Tu & W & Th & F & \node{Sa/\\Su}; & \node{Goal\\Total}; & Total \\\hline
+    {Push\\Ups}  &   &    &   &    &   &                 & 5                   &       \\\hline
+{Sit\\Ups} &   &    &   &    &   &                 & 7                   &       \\\hline
+   Etc.   &   &    &   &    &   &                 & 4                   &       \\\hline
+    Read   &   &    &   &    &   &                 & 60                  &       \\\hline
+           &   &    &   &    &   &                 &                     &       \\\hline
+           &   &    &   &    &   &                 &                     &       \\\hline
+           &   &    &   &    &   &                 &                     &       \\\hline
+           &   &    &   &    &   &                 &                     &       \\\hline
+           &   &    &   &    &   &                 &                     &       \\\hline
+           &   &    &   &    &   &                 &                     &       \\
+  };
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

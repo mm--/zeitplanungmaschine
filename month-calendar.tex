@@ -1,0 +1,87 @@
+\scriptsize
+    \begin{tikzpicture}[xscale=1, yscale=1.97]
+      \def\dispweekreminder{}             %Don't display small events
+      \def\Tiny{\fontsize{4pt}{4pt}\selectfont}
+      \tikzstyle{eventcolor}=[color=black]
+      \tikzstyle{eventstyle}=[eventcolor, text width=1cm]
+      \let\%=\pgfcalendarshorthand
+      \newcount\eventcount
+      \newcount\temp
+      \renewcommand{\blah}[1]
+      {
+        \edef\argh{event\pgfcalendarcurrentday-\the\eventcount}
+        \advance\eventcount by 1
+        \ifthenelse{\equal{\the\eventcount}{1}}
+        {  \draw (\&, 5 - \value{calyposition}) ++ (0, -4pt) node (event\pgfcalendarcurrentday-\the\eventcount) [eventstyle] {#1};}
+        {  \draw (\argh.south) ++(0, -2pt) node (event\pgfcalendarcurrentday-\the\eventcount) [anchor=north, eventstyle] {#1};}%
+      }
+      
+
+      \renewcommand{\dispevent}[8]
+      {
+        \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
+        \ifthenelse{\equal{#4}{}}{}
+        {
+            \blah{\Tiny{#4}}
+        }
+      }
+
+      \tikzstyle{filling}=[fill=blue!20]
+
+      \draw[help lines] (0,0) grid (7cm, 5cm);
+
+      \setcounter{calyposition}{0}
+
+      \pgfcalendar{cal}{\weekstart}{\weekstart+33}
+                  {%
+                    \leavevmode%
+                    \pgfmathparse{mod(\pgfcalendarcurrentweekday+1,7)} % Week begins on Sunday
+                    \let\%=\pgfcalendarshorthand
+                    \let\&=\pgfmathresult
+                    \ifdate{between=\weekstart and \weekstart+6}
+                                      {
+                                        \tikzstyle{isweek}=[blue]
+                                      }{
+                                        \tikzstyle{isweek}=[black]
+                                        }
+
+                    \ifdate{workday}{\tikzstyle{filling}=[fill=none]}{\tikzstyle{filling}=[fill=gray!20,semitransparent]}
+                    \draw (\&, 5 - \value{calyposition}) node [anchor=north west, transform shape, filling, minimum width=1cm, minimum height=1cm] {};
+                    \draw (\&, 5 - \value{calyposition}) node (day\pgfcalendarcurrentday) [anchor=north west,isweek] 
+                    {\pgfcalendarcurrentday\ifdate{day of month = 1}
+                      { \%{m}{.}}{}};
+                    %% \draw (\& * 2 + 10, 5 - \value{calyposition}) node [anchor=north] {\offset - \diff - \diffend};
+
+                    \eventcount=0
+                    \disptoday
+
+                    \ifdate{between=\weekstart and \weekstart+6}
+                           {
+                             \draw (\& + 1, 5) node ({\%{w}{.}}) [anchor=south east, filling, fill=none] {\%{w}{.}};
+                           }{}
+
+                    %% \ifdate{equals=\weekyear-\weekmonth-\weekday}
+                    %%        { 
+                    %%        \draw (\&, 5 - \value{calyposition}) node [anchor=north west, green] {\pgfcalendarcurrentday};
+                    %%        }{}%
+
+                    \ifdate{Saturday}{ \addtocounter{calyposition}{1}}{}%
+                    \ifthenelse{\value{calyposition} > 4}
+                                      {
+                                        \setcounter{calyposition}{0}
+                                      }{}
+                  }
+
+
+                  \pgfcalendar{cal}{\weekyear-\weekmonth-01}{\weekyear-\weekmonth-01}
+                              {        
+                                \let\%=\pgfcalendarshorthand         
+                                \draw node [above of=Wed, node distance=0.3cm] {\%mt \%y0};
+                              }
+
+    \end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

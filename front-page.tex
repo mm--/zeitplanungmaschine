@@ -1,0 +1,206 @@
+\normalsize
+\begin{tikzpicture}
+\newcount\mycount
+
+% More ideas
+% moon phases
+% Percent of year over
+% week number (and total)
+% seasons
+% Julian day
+
+\pgfcalendardatetojulian{1991-07-01}{\mycount} %Days old
+\edef\birthday{\the\mycount}
+\pgfcalendardatetojulian{\weekstart+-1}{\mycount}
+\advance\mycount by -\birthday
+\edef\daysold{\the\mycount}
+
+\pgfcalendarifdate{\weekstart}{at most=\weekyear-07-01}
+{\pgfcalendardatetojulian{\weekyear-07-01}{\mycount}}
+{\mycount=\weekyear
+  \advance\mycount by 1
+  \pgfcalendardatetojulian{\mycount-07-01}{\mycount}}
+\edef\nextbirthday{\the\mycount}
+\pgfcalendardatetojulian{\weekstart+-1}{\mycount}
+\advance\mycount by -\nextbirthday
+\multiply\mycount by -1
+\edef\daysuntilbday{\the\mycount} %Days until next bday
+
+\draw (0,0) node [anchor=north west, xscale=1]{
+M\=oller-Mara \scriptsize{\daysold/\daysuntilbday}
+};
+\draw (0,-0.6cm) node [anchor=north west, text width=\width, xscale=0.75, yscale=1, transform shape]{
+\normalsize{\texttt{DIE}}
+} ++(0, -0.3cm) node [anchor=north west, text width=\width, text centered, xscale=0.75, yscale=1, transform shape]{
+\Huge{\textbf{\texttt{ZEITPLANUNGMASCHINE}}}\\
+\scriptsize{\textit{SCHEDULING ENGINE}}
+};
+
+
+\newcount\daysinmonth
+\newcount\daysinyear
+\pgfcalendardatetojulian{\weekyear-\weekmonth-last+1}{\daysinmonth}
+\pgfcalendardatetojulian{\weekyear-\weekmonth-01}{\mycount}
+\advance \daysinmonth by -\mycount
+\pgfcalendardatetojulian{\weekyear-12-last+1}{\daysinyear}
+\pgfcalendardatetojulian{\weekyear-01-01}{\mycount}
+\edef\startyear{\the\mycount}
+\advance \daysinyear by -\mycount
+
+
+\newdimen\rotdiff
+\newcount\total
+\newcount\temp
+\let\pgfcsh=\pgfcalendarshorthand
+
+\tikzstyle{filling}=[fill=blue!20]
+\begin{scope}[xshift=92pt, yshift=-150pt]
+  \begin{scope}
+        \calendar (large_cal) at (0,0) [ dates=\weekyear-01-01 to \weekyear-12-last,
+        day code={
+          \draw (\the\rotdiff:-0.25cm) node (circ-\pgfcsh{y}{0}-\pgfcsh{m}{0}-\pgfcsh{d}{0}) [filling, circle, minimum size=2pt] {};
+          \ifdate{day of month = 1}
+          {\node[name=\pgfcalendarsuggestedname,every day, anchor=center]{\scriptsize{\texttt{\pgfcalendarshorthand{m}{.}}}};}{}}]
+    if (at most=\weekstart-1) {
+      \tikzstyle{filling}=[fill=red]
+    }
+    if (at least=\weekstart+7) {
+      \tikzstyle{filling}=[fill=gray!80]
+    }
+    if (between=\weekstart and \weekstart+6) {
+      \tikzstyle{filling}=[fill=blue]
+    } 
+    if (day of month = 1) {
+      \tikzstyle{filling}=[fill=black]
+    }
+    if (all) {
+      \total=\pgfcalendarendjulian
+      \advance\total by -\pgfcalendarbeginjulian
+      \advance\total by 1
+      \temp = \pgfcalendarcurrentjulian
+      \advance\temp by -\pgfcalendarbeginjulian      
+      \pgfmathsetlength\rotdiff{ \temp * -1 * (360 / \total) + 90}
+      \pgftransformshift{\pgfpointpolar{\rotdiff}{2.2cm}} 
+    };
+    % \node [above of=large_cal-\weekyear-01-01] {\weekyear};
+  \end{scope}
+  \begin{scope}
+    \calendar at (0,0) [ dates=\weekyear-\weekmonth-01 to \weekyear-\weekmonth-last, day
+    code={
+      \node[name=\pgfcalendarsuggestedname,every
+      day, anchor=center]{\scriptsize{\texttt{\tikzdaytext}}};
+    }] 
+    if (at most=\weekstart-1) [red!50!black]
+    if (at least=\weekstart+7) [gray!80]
+    if (Sunday) [black]
+    if (between=\weekstart and \weekstart+6) [blue]
+    if (day of month=1) { 
+      \draw (0,0) node (month) [anchor=north,blue]
+      {\large{\texttt{\pgfcalendarshorthand{m}{t}}}}; \draw node [above
+      of=month,node distance=.5cm, anchor=north, black] {\large{\texttt{\pgfcalendarshorthand{y}{0}}}}; }
+    if (all) {
+      \pgfmathsetlength\rotdiff{ (-\the\numexpr \pgfcalendarcurrentday \relax + 1 )* 360 / %Remove leading zeros
+        \daysinmonth + 90}
+      \pgftransformshift{\pgfpointpolar{\rotdiff}{1.5cm}} };
+  \end{scope}
+  \begin{scope}
+    \calendar at (0,0) [ dates=\weekstart to \weekstart+6, day
+    code={
+        \pgfcalendardatetojulian{\weekstart}{\mycount}
+        \temp = \pgfcalendarcurrentjulian
+        \advance\temp by -\mycount
+        \node [anchor=center, black] at (\the\rotdiff:-0.25cm) {\scriptsize{\texttt{\shortweekday{\the\temp}}}};
+    }] 
+    if (equals=\weekyear-\weekmonth-last+1) {
+        \draw (0,0) node (tomonth) [below of=month, node distance=.25cm] {\small{\texttt{to}}};
+        \node (0,0) (nextmonth) [below of=tomonth, node distance=.25cm] {\small{\texttt{\pgfcalendarshorthand{m}{.}}}};
+    }
+    if (equals=\weekyear-12-last+1) {
+        \node [below of=nextmonth, node distance=.25cm] (0,0) {\small{\texttt{\pgfcalendarshorthand{y}{0}}}};
+    }
+    if (all) {
+      \pgfmathsetlength\rotdiff{ (-\the\numexpr \pgfcalendarcurrentday \relax + 1 )* 360 /
+        \daysinmonth + 90}
+      \pgftransformshift{\pgfpointpolar{\rotdiff}{1.5cm}} };
+  \end{scope}
+
+  \newcommand{\blahdude}[2]
+  {
+    \pgfcalendardatetojulian{#1}{\temp}
+    \advance\temp by -\startyear
+    \edef\firstday{\the\temp}
+    \pgfcalendardatetojulian{#2}{\temp}
+    \advance\temp by -\startyear
+    \pgfmathsetlength\rotdiff{ abs(\temp + \firstday) / 2 * -1 * (360 / \daysinyear) + 90}
+  }
+  \newcommand{\findpercent}[2]
+  {
+    \pgfcalendardatetojulian{#1}{\temp}
+    \advance\temp by -\startyear
+    \edef\firstday{\the\temp}
+    \pgfcalendardatetojulian{#2}{\temp}
+    \advance\temp by -\startyear
+    \pgfmathparse{ (\temp - \firstday) * (100 / \daysinyear)}
+  }
+  \newcommand{\finddiff}[2]
+  {
+    \pgfcalendardatetojulian{#1}{\temp}
+    \advance\temp by -\startyear
+    \edef\firstday{\the\temp}
+    \pgfcalendardatetojulian{#2}{\temp}
+    \advance\temp by -\startyear
+    \advance\temp by -\firstday
+  }
+  \blahdude{\weekyear-01-01}{\weekstart+0}
+  \edef\pasttmiddle{\the\rotdiff}
+  % \draw (0,0) -- (\pasttmiddle:2.5cm);
+  \blahdude{\weekstart}{\weekstart+6}
+  \edef\presentmiddle{\the\rotdiff}
+  % \draw (0,0) -- (\presentmiddle:2.5cm);
+  \blahdude{\weekstart+6}{\weekyear-12-31}
+  \edef\futuremiddle{\the\rotdiff}
+  % \draw [thick, green] (0,0) -- (\futuremiddle:2.5cm);
+
+  % \draw [ultra thick, orange] (-100pt, 100pt) -- (-100pt, -100pt) coordinate (linea);
+  % \fill [green] (\the\rotdiff:2.5cm -| linea) circle (2pt);
+
+  \newdimen\outerring
+  \outerring=2.8cm
+  \newdimen\innerring
+  \innerring=2.5cm
+  \coordinate (futurestat) at (-65pt, -100pt);
+  \coordinate (paststat) at (65pt, -100pt);
+  \draw [-o, thick] (futurestat) -- ++(-20pt, 10pt) |- (\futuremiddle:\outerring) -- (\futuremiddle:\innerring);
+  \draw [-o, thick] (paststat) -- ++(20pt, 10pt) |- (\pasttmiddle:\outerring) -- (\pasttmiddle:\innerring);
+
+  \tikzstyle{stat info}=[text width=40pt, text centered, anchor=north]
+  \findpercent{\weekyear-01-01}{\weekstart+0}
+  \edef\pastpercent{\pgfmathresult}
+  \finddiff{\weekyear-01-01}{\weekstart+0}
+  \draw (paststat) ++ (0, -2pt) node (pasttwo) [stat info] {\texttt{\scriptsize{\pastpercent\%}}};
+  \draw (pasttwo.south) ++ (0, -1pt) node [stat info] {\texttt{\scriptsize{\the\temp}}};
+
+  \findpercent{\weekstart+6}{\weekyear-12-31}
+  \edef\futurepercent{\pgfmathresult}
+  \finddiff{\weekstart+6}{\weekyear-12-31}
+  \draw (futurestat) ++ (0, -2pt) node (futuretwo) [stat info] {\texttt{\scriptsize{\futurepercent\%}}};
+  \draw (futuretwo.south) ++ (0, -1pt) node [stat info] {\texttt{\scriptsize{\the\temp}}};
+
+  \draw (0, -100pt) node (presenttwo) [stat info] {\texttt{\scriptsize{\weekjulianday}}};
+  \draw (presenttwo.south) ++ (0, -1pt) node [stat info] {\texttt{\scriptsize{W\weeknum}}};
+
+\end{scope}
+\newcommand{\daysuntil}[1]
+{
+\pgfcalendardatetojulian{\weekstart+-1}{\mycount}
+\edef\temp{\the\mycount}
+\pgfcalendardatetojulian{#1}{\mycount}
+\advance\mycount by -\temp
+}
+
+\end{tikzpicture}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 

@@ -1,0 +1,146 @@
+\documentclass[12pt, landscape, oneside]{memoir}
+\parindent 0pt            % no paragraph indent by default
+\usepackage{tikz}         % Drawing package
+\usepackage{pifont}       %for \ding{113}
+\usepackage[latin1]{inputenc}
+\usetikzlibrary{calendar}
+\usetikzlibrary{matrix}
+\usetikzlibrary{arrows}
+\usepackage{forloop}
+\pagestyle{empty}  % No headers or footers (or page numbers)
+\raggedbottom	 % No attempt for constant height for text block, unlike \flushbottom
+\settrimmedsize{8.5in}{11in}{*}
+\setlength{\trimtop}{0pt}
+\setlength{\trimedge}{\stockwidth}
+\addtolength{\trimedge}{-\paperwidth}
+\setulmarginsandblock{14.15pt}{14.15pt}{*}
+\setlrmarginsandblock{15pt}{15pt}{*}
+\setheadfoot{.01pt}{.01pt}
+\setheaderspaces{*}{.01pt}{*}
+\checkandfixthelayout
+\sloppybottom
+
+\newcommand{\theyear}{\the\year}
+\newcommand{\themonth}{\the\month}
+\newcommand{\theday}{\the\day}
+
+% \renewcommand{\theyear}{2011}
+% \renewcommand{\themonth}{12}
+% \renewcommand{\theday}{29}
+
+\newdimen\sideL                 %left
+\newdimen\sideR                 %right
+\newdimen\sideT                 %top
+\newdimen\sideB                 %bottom
+\newdimen\foldA                 %left fold
+\newdimen\foldB                 %middle fold
+\newdimen\foldC                 %right fold
+\newdimen\foldM                 %middle longways fold
+\newdimen\width
+\newdimen\height
+\newdimen\xshift                %adjust shifting for printer
+
+\xshift = 0pt
+% \xshift = -13pt
+
+\foldM = 307pt
+\foldA = 195pt
+\foldB = 395pt
+\foldC = 597pt
+\sideL = 45pt
+\sideR = 785pt
+\sideT = 605pt
+\sideB = 10pt
+
+\input{utilities.tex}
+\input{styles.tex}
+\input{dates.tex}               %Import all the dates into events
+
+\newcommand{\drawpage}[6]       %\drawpage{left_x}{top_y}{right_x}{bottom_y}{rotate}{file}
+{
+  \pgfmathsetlength\height{abs(#2 - #4) - 1pt}
+  \pgfmathsetlength\width{abs(#1 - #3) - 1pt}
+  \draw (#1, #2) node[inner sep=0pt,anchor=north west, rotate=#5] {\input{#6}};
+}
+\begin{document}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \node at (current page.center) [rotate=0]
+{
+  \begin{tikzpicture}
+  \draw[use as bounding box, purple, ultra thick] (0, 0) rectangle (11in, 8.5in);
+  %% \draw[help lines, step=10pt, color=blue] (0,0) grid (11in, 8.5in);
+  %% \draw[help lines, step=100pt, color=blue, thick] (0,0) grid (11in, 8.5in);
+  % \draw[semithick] (45pt, \sideB) rectangle (\sideR, \sideT);
+  \begin{scope}[xshift=\xshift]
+    \draw[semithick] (\sideL, \sideB) -- (\sideR, \sideB) -- (\sideR,
+    \sideT) -- (\sideL, \sideT) -- cycle; \draw[semithick] (\foldB,
+    \sideB) -- (\foldB, \sideT); \draw[semithick] (\foldA, \sideB) --
+    (\foldA, \sideT); \draw[semithick] (\foldC, \sideB) -- (\foldC,
+    \sideT); \draw[semithick] (\sideL, \foldM) -- (\sideR,
+    \foldM); %Longways cut
+    \draw[ultra thick] (\sideL, \foldM) -- (\foldA,
+    \foldM); %Do not cut here
+
+    \drawpage{\foldB}{\sideT}{\foldC}{\foldM}{0}{next-week.tex}
+    \drawpage{\foldC}{\sideT}{\sideR}{\foldM}{0}{scratchpad.tex}
+    \drawpage{\foldA}{\sideT}{\foldB}{\foldM}{0}{todo.tex}
+    \drawpage{\sideR}{\sideB}{\foldC}{\foldM}{180}{grid.tex}
+    \drawpage{\foldB}{\sideB}{\foldA}{\foldM}{180}{finance.tex}
+    \drawpage{\sideL}{\foldM}{\foldA}{\sideB}{0}{later-upcoming.tex}
+    \drawpage{\sideL}{\sideT}{\foldA}{\foldM}{0}{otherinfo.tex}
+    \drawpage{\foldC}{\sideB}{\foldB}{\foldM}{180}{goals-week.tex}
+  \end{scope}
+  \end{tikzpicture}
+};
+\end{tikzpicture}
+
+% \begin{tikzpicture}{remember picture, overlay}
+%   \node at (current page.north west)
+% {
+%   Hello world!
+%   \myyear
+%   \mymonth
+%   \myday
+%   \weekstart
+% };
+% \end{tikzpicture}
+\clearpage
+\sideL=10pt
+\begin{tikzpicture}[remember picture, overlay]
+  \node at (current page.center) [rotate=0]
+{
+  \begin{tikzpicture}
+  \draw[use as bounding box, purple, ultra thick] (0, 0) rectangle (11in, 8.5in);
+  %% \draw[help lines, step=10pt, color=green] (0,0) grid (11in, 8.5in);
+  %% \draw[help lines, step=100pt, color=green, thick] (0,0) grid (11in, 8.5in);
+  \begin{scope}[xshift=\xshift]
+    \draw[semithick] (\sideL, \sideB) rectangle (\sideR, \sideT);
+    \draw[semithick] (\sideL, \foldM) -- (\sideR,
+    \foldM); %Longways cut
+    \draw[ultra thick] (\sideL, \foldM) -- (\foldA,
+    \foldM); %Do not cut here
+    \draw[semithick] (\foldB, \sideB) -- (\foldB, \sideT);
+    \draw[semithick] (\foldA, \sideB) -- (\foldA, \sideT);
+    \draw[semithick] (\foldC, \sideB) -- (\foldC, \sideT);
+
+    \drawpage{\sideL}{\sideT}{\foldA}{\foldM}{0}{upcoming.tex}
+    \drawpage{\foldA}{\sideT}{\foldB}{\foldM}{0}{month-calendar.tex}
+    \drawpage{\foldB}{\sideT}{\foldC}{\foldM}{0}{this-week.tex}
+    \drawpage{\foldC}{\sideT}{\sideR}{\foldM}{0}{timebox.tex}
+    \drawpage{\foldB}{\sideB}{\foldA}{\foldM}{180}{back-page.tex}
+    \drawpage{\foldA}{\sideB}{\sideL}{\foldM}{180}{front-page.tex}
+    \drawpage{\foldC}{\sideB}{\foldB}{\foldM}{180}{finance.tex}
+  \end{scope}
+  \end{tikzpicture}
+};
+\end{tikzpicture}
+
+\end{document}
+
+% LocalWords:  semithick
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "zeitplanungmaschine.tex"
+%%% End: 
