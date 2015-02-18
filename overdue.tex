@@ -1,10 +1,9 @@
 \def\Tiny{\fontsize{6pt}{6pt}\selectfont}
 \scriptsize
 \begin{tikzpicture}
-\def\dispweekreminder{}             %Don't display small events
-\clip (0, 0) rectangle (\width, -\height);
-\draw (0,0) node [text width=\width, text centered] {\textbf{Upcoming}};
-\pgfmathsetlength\width{\width - 5pt}
+\useasboundingbox (0, 0) rectangle (\width, -\height);
+\draw (0,0) node [text width=\width, text centered] {\textbf{Overdue}};
+
 \tikzstyle{eventstyle}=[text width = \width]
 \let\%=\pgfcalendarshorthand
 \newcount\eventcount
@@ -17,20 +16,19 @@
   {  \draw (0,-10pt) node (event\the\eventcount) [eventstyle] {#1};}
   {  \draw (\argh.south) ++(0, -1pt) node (event\the\eventcount) [anchor=north, eventstyle] {#1};}%
 }
+\def\displesserevent{}             %Don't display lesser events like birthdays
+\def\dispweekreminder{}             %Don't display small events
 
 \renewcommand{\dispevent}[8]
 {
   \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
-  \blah{\textcolor{\eventcolor}{\texttt{\%{m}{.}.\%{d}{0} (\%{w}{.})} \textcolor{black}{ -- #5 \formattime{#7}{#8}}}}
+  \blah{\texttt{\%{m}{.}.\%{d}{0} (\%{w}{.}) --} #5 \formattime{#7}{#8}}
 }
 
-\pgfcalendar{cal}{\startdate}{\weekstart+33}
+\pgfcalendar{cal}{\theyear-\themonth-\theday+-30}{\theyear-\themonth-\theday+-1}
 {
+  \let\birthday=\dummybirthday
   \Tiny
-  \ifdate{between=\weekstart and \weekstart+6}
-  {\def\eventcolor{blue}}
-  {      \def\dispweekreminder{}             %Don't display small events
-    \def\eventcolor{black}\ifdate{Monday}{\blah{\hrulefill}}}
   \disptoday
 }
 \end{tikzpicture}
