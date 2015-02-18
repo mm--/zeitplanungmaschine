@@ -31,7 +31,7 @@ sink("testdates.tex")
 cat(dt[type!="", paste0("\\reminder{", format(date, "%Y"), "}{",
                         format(date, "%m"), "}{",
                         format(date, "%d"), "}{",
-                        substr(heading, 0, 5), "}{",
+                        substr(heading, 0, 12), "}{",
                         heading, "}{}{",
                         startTime, "}{",
                         endTime, "}\n")])

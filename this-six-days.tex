@@ -12,7 +12,7 @@
         \edef\argh{eventtwo\pgfcalendarcurrentday-\the\eventcount}
         \advance\eventcount by 1
         \ifthenelse{\equal{\the\eventcount}{1}}
-        {  \draw (eventtwo\pgfcalendarcurrentday.south west) ++ (0, -4pt) node (eventtwo\pgfcalendarcurrentday-\the\eventcount) [eventstyle] {#1};}
+        {  \draw (eventtwo\pgfcalendarcurrentday.south west) ++ (\weekxpos, -4pt) node (eventtwo\pgfcalendarcurrentday-\the\eventcount) [eventstyle] {#1};}
         {  \draw (\argh.south) ++(0, -2pt) node (eventtwo\pgfcalendarcurrentday-\the\eventcount) [anchor=north, eventstyle] {#1};}%
       }
       \renewcommand{\dispevent}[8]
@@ -23,7 +23,7 @@
 
 
       \setcounter{weekypos2}{0pt}
-      \setlength{\weekxpos}{0pt}
+      \setlength{\weekxpos}{4pt}
       \newdimen\halfwidth
       \pgfmathsetlength\halfwidth{\width / 2}
 
@@ -32,7 +32,7 @@
                     \leavevmode%
                     \let\%=\pgfcalendarshorthand
                     \ordinaldate{\pgfcalendarcurrentjulian}{\pgfcalendarcurrentyear}
-                    \tikzstyle{daywidth}=[text width=\width]
+                    \tikzstyle{daywidth}=[text width=\width-2*\weekxpos]
                     % \ifdate{workday}
                     % {\tikzstyle{daywidth}=[text width=\width]}
                     % {\tikzstyle{daywidth}=[text width=\halfwidth]}
@@ -41,12 +41,12 @@
                     %  \addtolength{\weekxpos}{99px}
                     % }
                     {\addtocounter{weekypos2}{-3pt}}
-                    \draw (\weekxpos, \value{weekypos2}) node (eventtwo\pgfcalendarcurrentday) [daylabel, daywidth] {\%w. --- \%m. \%d0 % \ifdate{workday}{}{\\}
+                    \draw (0, \value{weekypos2}) node (eventtwo\pgfcalendarcurrentday) [daylabel, text width=\width] {\%w. --- \%m. \%d0 % \ifdate{workday}{}{\\}
                       (\firstord/\secondord)};
                     \eventcount=0
                     \disptoday
                     \ifdate{Sunday}{
-                      \draw (\weekxpos, \value{weekypos2}) -- (\weekxpos, \value{weekypos2}-3.5);
+                      \draw (0, \value{weekypos2}) -- (0, \value{weekypos2}-3.5);
                     }{}
                     
                   }

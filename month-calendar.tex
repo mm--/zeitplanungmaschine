@@ -1,7 +1,7 @@
 \scriptsize
     \begin{tikzpicture}[xscale=1, yscale=1.97]
       \def\dispweekreminder{}             %Don't display small events
-      \def\Tiny{\fontsize{4pt}{4pt}\selectfont}
+      \def\Tiny{\fontsize{3pt}{3pt}\selectfont}
       \tikzstyle{eventcolor}=[color=black]
       \tikzstyle{eventstyle}=[eventcolor, text width=1cm]
       \let\%=\pgfcalendarshorthand
@@ -13,7 +13,7 @@
         \advance\eventcount by 1
         \ifthenelse{\equal{\the\eventcount}{1}}
         {  \draw (\&, 5 - \value{calyposition}) ++ (0, -4pt) node (event\pgfcalendarcurrentday-\the\eventcount) [eventstyle] {#1};}
-        {  \draw (\argh.south) ++(0, -2pt) node (event\pgfcalendarcurrentday-\the\eventcount) [anchor=north, eventstyle] {#1};}%
+        {  \draw (\argh.south) ++(0, -1pt) node (event\pgfcalendarcurrentday-\the\eventcount) [anchor=north, eventstyle] {#1};}%
       }
       
 
