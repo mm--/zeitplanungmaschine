@@ -2,7 +2,7 @@
 \parindent 0pt            % no paragraph indent by default
 \usepackage{tikz}         % Drawing package
 \usepackage{pifont}       %for \ding{113}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usetikzlibrary{calendar}
 \usetikzlibrary{matrix}
 \usetikzlibrary{arrows}
@@ -65,7 +65,7 @@
 \begin{document}
 
 \begin{tikzpicture}[remember picture, overlay]
-  \node at (current page.center) [rotate=0]
+  \node at (current page.center) [rotate=180]
 {
   \begin{tikzpicture}
   \draw[use as bounding box, purple, ultra thick] (0, 0) rectangle (11in, 8.5in);
@@ -108,7 +108,7 @@
 \clearpage
 \sideL=10pt
 \begin{tikzpicture}[remember picture, overlay]
-  \node at (current page.center) [rotate=0]
+  \node at (current page.center) [rotate=180]
 {
   \begin{tikzpicture}
   \draw[use as bounding box, purple, ultra thick] (0, 0) rectangle (11in, 8.5in);
@@ -126,11 +126,12 @@
 
     \drawpage{\sideL}{\sideT}{\foldA}{\foldM}{0}{upcoming.tex}
     \drawpage{\foldA}{\sideT}{\foldB}{\foldM}{0}{month-calendar.tex}
-    \drawpage{\foldB}{\sideT}{\foldC}{\foldM}{0}{this-week.tex}
+    \drawpage{\foldB}{\sideT}{\foldC}{\foldM}{0}{this-six-days.tex}
     \drawpage{\foldC}{\sideT}{\sideR}{\foldM}{0}{timebox.tex}
     \drawpage{\foldB}{\sideB}{\foldA}{\foldM}{180}{back-page.tex}
     \drawpage{\foldA}{\sideB}{\sideL}{\foldM}{180}{front-page.tex}
     \drawpage{\foldC}{\sideB}{\foldB}{\foldM}{180}{finance.tex}
+    \drawpage{\sideR}{\sideB}{\foldC}{\foldM}{180}{include-pdf-test.tex}
   \end{scope}
   \end{tikzpicture}
 };

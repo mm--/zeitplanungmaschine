@@ -96,8 +96,8 @@ M\=oller-Mara \scriptsize{\daysold/\daysuntilbday}
     if (between=\weekstart and \weekstart+6) [blue]
     if (day of month=1) { 
       \draw (0,0) node (month) [anchor=north,blue]
-      {\large{\texttt{\pgfcalendarshorthand{m}{t}}}}; \draw node [above
-      of=month,node distance=.5cm, anchor=north, black] {\large{\texttt{\pgfcalendarshorthand{y}{0}}}}; }
+      {\large{\texttt{\pgfcalendarshorthand{m}{t}}}};
+      \draw node [above of=month,node distance=.5cm, anchor=north, black] {\large{\texttt{\pgfcalendarshorthand{y}{0}}}}; }
     if (all) {
       \pgfmathsetlength\rotdiff{ (-\the\numexpr \pgfcalendarcurrentday \relax + 1 )* 360 / %Remove leading zeros
         \daysinmonth + 90}

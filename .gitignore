@@ -3,3 +3,7 @@
 *.log
 *.out
 auto/*
+/org-agenda.csv
+/testdates.tex
+/zeitplanungmaschine.fdb_latexmk
+/zeitplanungmaschine.fls
