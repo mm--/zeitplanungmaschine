@@ -15,9 +15,9 @@
       \edef\timetwo{\pgfmathresult}
       \pgfmathsetlength\timespandimen{(\timetwo - \timeone) * \newy}
       \begin{scope}
-        \clip (-1, -\timeone) rectangle ++(\pgfcalendarcurrentweekday+3,-\timespandimen);
-        \draw (\pgfcalendarcurrentweekday, -\timeone) rectangle ++(1,-\timespandimen+0.1pt);
-        \draw (\pgfcalendarcurrentweekday, -\timeone) node [draw=none, minimum height=\timespandimen, fill=yellow, fill opacity=0.4, text
+        \clip (-1, -\timeone) rectangle ++(\value{loopindex}+3,-\timespandimen);
+        \draw (\value{loopindex}, -\timeone) rectangle ++(1,-\timespandimen+0.1pt);
+        \draw (\value{loopindex}, -\timeone) node [draw=none, minimum height=\timespandimen, fill=yellow, fill opacity=0.4, text
         opacity=1] {#5};
       \end{scope}
     }
@@ -29,17 +29,36 @@
   \begin{scope}[x=\newx, y=\newy]
     \tikzstyle{thefill}=[]
     \tikzstyle{every node}=[text width=\newx, text centered, minimum height=\newy, thefill]
-    \foreach \day in {-1, 0,..., 6}
+    % \pgfcalendar{cal}{\theyear-\themonth-\theday-1}{\theyear-\themonth-\theday+5}{
+    %   \addtocounter{loopindex}{1}
+    %   \foreach \time in {-1, 0,..., 23}
+    %   {
+    %     \ifodd \loopindex \def\filltime{white}\else\def\filltime{green}\fi
+    %     \ifodd \time \edef\filltime{\filltime}\else\def\filltime{blue}\fi
+    %     \tikzstyle{thefill}=[fill=\filltime!10]
+    %     \draw (\loopindex, -\time) node {\ifthenelse{\time < 0} {\shortweekday{\day}}
+    %       {\ifthenelse{\day < 0}{\time:00}{}}};
+    %   }
+    %   \ifthenelse{\loopindex < 0}{}{\draw [white, ultra thick] (\day, 1) -- (\day, -24);}
+    % }
+    \pgfcalendar{cal}{\theyear-\themonth-\theday}{\theyear-\themonth-\theday}
     {
-      \foreach \time in {-1, 0,..., 23}
+      \pgfcalendarcurrentweekday
+
+      \foreach \day in {-1, 0,..., 6}
+      {
+        \foreach \time in {-1, 0,..., 23}
         {
           \ifodd \day \def\filltime{white}\else\def\filltime{green}\fi
           \ifodd \time \edef\filltime{\filltime}\else\def\filltime{blue}\fi
           \tikzstyle{thefill}=[fill=\filltime!10]
-          \draw (\day, -\time) node {\ifthenelse{\time < 0} {\shortweekday{\day}}
-          {\ifthenelse{\day < 0}{\time:00}{}}};
+          \pgfmathparse{int(mod(\day+\pgfcalendarcurrentweekday,7))} % Week begins on Sunday
+          \let\&=\pgfmathresult
+          \draw (\day, -\time) node {\ifthenelse{\time < 0} {\ifthenelse{\day < 0}{}{\shortweekday{\&}}}
+            {\ifthenelse{\day < 0}{\time:00}{}}};
         }
         \ifthenelse{\day < 0}{}{\draw [white, ultra thick] (\day, 1) -- (\day, -24);}
+      }
     }
     \tikzstyle{thefill}=[draw=black]
     \Tiny
@@ -70,8 +89,11 @@
     % \draw (3, -13) node [minimum height=1*\newy, fill=gray!20] {117 Dis};
     % \draw (2, -8) node [minimum height=1*\newy, fill=green!20] {110 Dis};
     
-    \pgfcalendar{cal}{\weekstart}{\weekstart+6}
+    \setcounter{loopindex}{-1}
+    \pgfcalendar{cal}{\theyear-\themonth-\theday}{\theyear-\themonth-\theday+6}
     {
+      \pgfcalendarcurrentweekday
+      \addtocounter{loopindex}{1}
       \disptoday
     }
 
