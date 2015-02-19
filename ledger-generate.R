@@ -30,16 +30,28 @@ ledgerToDT <- function(command) {
     dt
 }
 
-expenses <- ledgerToDT("ledger --effective -b \"this month\" -e tomorrow csv ^expenses income")[,-sum(Amount)]
-wallet <- ledgerToDT("ledger csv wallet")[,sum(Amount)]
-amex <- ledgerToDT("ledger csv \"American Express\"")[,sum(Amount)]
-visa <- ledgerToDT("ledger csv \"Visa\"")[,sum(Amount)]
-checking <- ledgerToDT("ledger csv checking liabilities")[,sum(Amount)]
+bigtable <- data.frame(symbol = "", expression = "")
 
+bigtable <- rbind(
+    c("expenses", "ledger --effective -b \"this month\" -e tomorrow csv ^expenses"),
+    c("expensesee", "ledger --effective -b \"this month\" -e tomorrow csv \"Eating out\""),
+    c("expensesinc", "ledger --effective -b \"this month\" -e tomorrow csv ^expenses income"),
+    c("expensesweek", "ledger --effective -b \"this week\" -e tomorrow csv ^expenses"),
+    c("wallet", "ledger csv wallet"),
+    c("amex", "ledger csv \"American Express\""),
+    c("visa", "ledger csv \"Visa\""),
+    c("checking", "ledger csv checking liabilities"))
 
 sink("finance-output.tex")
-cat(paste0("\\def\\", c("expenses", "wallet", "amex", "visa", "checking"),
+
+cat(paste0("\\def\\", bigtable[,1],
            "{",
-           round(c(expenses, wallet, amex, visa, checking), digits = 2),
+           round(sapply(bigtable[,2], function(x)ledgerToDT(x)[,sum(Amount)]), digits = 2),
            "}\n"))
+
 sink()
+
+
+
+
+
