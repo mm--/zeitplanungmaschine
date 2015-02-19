@@ -19,7 +19,7 @@
 \def\displesserevent{}             %Don't display lesser events like birthdays
 \def\dispweekreminder{}             %Don't display small events
 
-\renewcommand{\dispevent}[8]
+\renewcommand{\dispevent}[9]
 {
   \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
   \blah{\texttt{\%{m}{.}.\%{d}{0} (\%{w}{.}) --} #5 \formattime{#7}{#8}}

@@ -1,4 +1,4 @@
-\def\Tiny{\fontsize{6pt}{6pt}\selectfont}
+\def\Tiny{\fontsize{5pt}{5pt}\selectfont}
 \scriptsize
 \begin{tikzpicture}
 \def\dispweekreminder{}             %Don't display small events
@@ -18,7 +18,7 @@
   {  \draw (\argh.south) ++(0, -1pt) node (event\the\eventcount) [anchor=north, eventstyle] {#1};}%
 }
 
-\renewcommand{\dispevent}[8]
+\renewcommand{\dispevent}[9]
 {
   \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
   \blah{\textcolor{\eventcolor}{\texttt{\%{m}{.}.\%{d}{0} (\%{w}{.})} \textcolor{black}{ -- #5 \hfill\formattime{#7}{#8}}}}

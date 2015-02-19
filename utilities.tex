@@ -1,4 +1,13 @@
-\newcommand{\reminder}[8]{}     %dummy command, gets renewed 
+\newcommand{\reminder}[9]{}     %dummy command, gets renewed
+% 1 - Year
+% 2 - Month
+% 3 - Day
+% 4 - Truncated (for month calendar)
+% 5 - Headline
+% 6 - Internal context?
+% 7 - Start time
+% 8 - End time
+% 9 - Color
 \newcommand{\blah}[1]{}       %more dummies
 
 \newcommand{\dummybirthday}[4]{}
@@ -53,22 +62,22 @@
 {\expandafter\timetounits(#1)}
 \def\parsetime{\parseTime}
 
-\newcommand{\dispevent}[8]{}
+\newcommand{\dispevent}[9]{}
 \def\displesserevent{\dispevent}
 \def\dispweekreminder{\dispevent}
 
 \newcommand{\disptoday}{\dispkeyval{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}}
 
-\renewcommand{\reminder}[8]
+\renewcommand{\reminder}[9]
 {\pgfcalendar{cal}{#1-#2-#3}{#1-#2-#3}{ %Just to check for correct zero padding
-    \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\dispevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}}
+    \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\dispevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}{#9}}}}
 
-\newcommand{\lesserreminder}[8]
+\newcommand{\lesserreminder}[9]
 {\pgfcalendar{cal}{#1-#2-#3}{#1-#2-#3}{ %Just to check for correct zero padding
     \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\displesserevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}}
 % reminder
 % weekrmdr
-\newcommand{\weekrmdr}[8]
+\newcommand{\weekrmdr}[9]
 {\pgfcalendar{cal}{#1-#2-#3}{#1-#2-#3}{ %Just to check for correct zero padding
     \addtokey{events-\pgfcalendarshorthand{y}{0}-\pgfcalendarshorthand{m}{0}-\pgfcalendarshorthand{d}{0}}{\dispweekreminder{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}}
 
@@ -81,8 +90,8 @@
     - \the\yearsold}}
 {\ifthenelse{\equal{#4}{}}{}{(#4)}}{}{}}}}
 
-% \renewcommand{\reminder}[8]
-% {\addtokey{events-#1-#2-#3}{\dispevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}}}
+% \renewcommand{\reminder}[9]
+% {\addtokey{events-#1-#2-#3}{\dispevent{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}{#9}}}
 
 
 \newcounter{loopindex}

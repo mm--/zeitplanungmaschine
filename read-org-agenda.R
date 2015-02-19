@@ -34,7 +34,7 @@ cat(dt[type!="", paste0("\\reminder{", format(date, "%Y"), "}{",
                         substr(heading, 0, 12), "}{",
                         heading, "}{}{",
                         startTime, "}{",
-                        endTime, "}\n")])
+                        endTime, "}{}\n")])
 sink()
 
 sink("overdue-dates.tex")

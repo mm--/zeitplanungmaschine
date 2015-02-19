@@ -15,7 +15,7 @@
         {  \draw (\argh.south) ++(0, -2pt) node (event\pgfcalendarcurrentday-\the\eventcount) [anchor=north, eventstyle] {#1};}%
       }
 
-      \renewcommand{\reminder}[8]
+      \renewcommand{\reminder}[9]
       {
         \pgfmathsetcount\temp{mod(\pgfcalendarcurrentweekday+1,7)}
         \ifdate{equals={#1}-{#2}-{#3}}
