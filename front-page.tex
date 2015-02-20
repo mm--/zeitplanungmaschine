@@ -90,23 +90,26 @@ M\=oller-Mara \scriptsize{\daysold/\daysuntilbday}
       \node[name=\pgfcalendarsuggestedname,every
       day, anchor=center]{\scriptsize{\texttt{\tikzdaytext}}};
     }] 
-    if (at most=\weekstart-1) [red!50!black]
-    if (at least=\weekstart+7) [gray!80]
+    if (at most=\startdate-1) [red!50!black]
+    if (at least=\startdate+1) [gray!80]
     if (Sunday) [black]
-    if (between=\weekstart and \weekstart+6) [blue]
+    if (between=\startdate and \startdate) [blue] %How do I say ``equal'' again??
     if (day of month=1) { 
       \draw (0,0) node (month) [anchor=north,blue]
       {\large{\texttt{\pgfcalendarshorthand{m}{t}}}};
       \draw node [above of=month,node distance=.5cm, anchor=north, black] {\large{\texttt{\pgfcalendarshorthand{y}{0}}}}; }
+    if (between=\startdate and \startdate) {
+      \draw node [below of=month,node distance=.5cm, anchor=south, black] {\large{\texttt{\pgfcalendarshorthand{d}{0}}}};
+    }
     if (all) {
       \pgfmathsetlength\rotdiff{ (-\the\numexpr \pgfcalendarcurrentday \relax + 1 )* 360 / %Remove leading zeros
         \daysinmonth + 90}
       \pgftransformshift{\pgfpointpolar{\rotdiff}{1.5cm}} };
   \end{scope}
   \begin{scope}
-    \calendar at (0,0) [ dates=\weekstart to \weekstart+6, day
+    \calendar at (0,0) [ dates=\startdate to \startdate+6, day
     code={
-        \pgfcalendardatetojulian{\weekstart}{\mycount}
+        \pgfcalendardatetojulian{\startdate}{\mycount}
         \temp = \pgfcalendarcurrentjulian
         \advance\temp by -\mycount
         \node [anchor=center, black] at (\the\rotdiff:-0.25cm) {\scriptsize{\texttt{\shortweekday{\the\temp}}}};
