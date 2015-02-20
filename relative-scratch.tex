@@ -3,6 +3,7 @@
 \usepackage{tikz}         % Drawing package
 \usepackage{pifont}       %for \ding{113}
 \usepackage[utf8]{inputenc}
+\usepackage{import}
 \usetikzlibrary{calendar}
 \usetikzlibrary{matrix}
 \usetikzlibrary{arrows}
@@ -61,7 +62,7 @@
 {
   \pgfmathsetlength\height{abs(#2 - #4) - 1pt}
   \pgfmathsetlength\width{abs(#1 - #3) - 1pt}
-  \draw (#1, #2) node[inner sep=0pt,anchor=north west, rotate=#5] {\input{#6}};
+  \draw (#1, #2) node[inner sep=0pt,anchor=north west, rotate=#5] {\input{pages/#6}};
 }
 \begin{document}
 
