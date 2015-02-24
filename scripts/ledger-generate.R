@@ -1,6 +1,5 @@
 #!/usr/bin/Rscript
 ## Joshua Moller-Mara
-## Read in org-agenda CSV.
 
 library(data.table)
 library(stringr)
@@ -22,12 +21,14 @@ ggplot(blah, aes(x = Date, y = cumulative)) + geom_line()
 
 ledgerToDT <- function(command) {
     ledger.out <- system(command, intern = TRUE)
+    if(length(ledger.out) == 0)
+        return(0)
     dt <- data.table(read.csv(text = ledger.out, header = FALSE))
     setnames(dt, c("DateString", "Check", "Recipient",
                    "Account", "Currency", "Amount",
                    "Cleared", "Comment"))
     dt[,Date:=as.Date(DateString)]
-    dt
+    dt[,sum(Amount)]
 }
 
 bigtable <- data.frame(symbol = "", expression = "")
@@ -42,11 +43,11 @@ bigtable <- rbind(
     c("visa", "ledger csv \"Visa\""),
     c("checking", "ledger csv checking liabilities"))
 
-sink("finance-output.tex")
+sink("generated/finance-output.tex")
 
 cat(paste0("\\def\\", bigtable[,1],
            "{",
-           round(sapply(bigtable[,2], function(x)ledgerToDT(x)[,sum(Amount)]), digits = 2),
+           round(sapply(bigtable[,2], function(x)ledgerToDT(x)), digits = 2),
            "}\n"))
 
 sink()

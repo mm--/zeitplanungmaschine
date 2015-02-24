@@ -104,7 +104,7 @@
 \newcount\weekday
 \pgfcalendardatetojulian{\theyear-\themonth-\theday}{\julianday}
 \pgfcalendarjuliantoweekday{\the\julianday}{\weekday}
-\ifnum\weekday>4\relax%
+\ifnum\weekday>5\relax%
         \advance\weekday by -7\fi
 \advance\julianday by -\the\weekday
 \pgfcalendarjuliantodate{\the\julianday}{\weekyear}{\weekmonth}{\weekday}

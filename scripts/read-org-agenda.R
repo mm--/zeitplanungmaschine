@@ -5,7 +5,7 @@
 library(data.table)
 library(stringr)
 
-blah <- read.csv("org-agenda.csv", header = FALSE, stringsAsFactors = FALSE)
+blah <- read.csv("generated/org-agenda.csv", header = FALSE, stringsAsFactors = FALSE)
 
 names(blah) <- c("category", "heading", "type", "todo", "tags", "date", "time", "extra", "priority.l", "priority.n", "agenda.day")
 
@@ -27,7 +27,7 @@ dt[,time]
 ## Format
 ## \reminder{2013}{07}{28}{Event 1}{Event 1}{}{}{}
 
-sink("testdates.tex")
+sink("generated/testdates.tex")
 cat(dt[type!="", paste0("\\reminder{", format(date, "%Y"), "}{",
                         format(date, "%m"), "}{",
                         format(date, "%d"), "}{",
@@ -37,7 +37,7 @@ cat(dt[type!="", paste0("\\reminder{", format(date, "%Y"), "}{",
                         endTime, "}{}\n")])
 sink()
 
-sink("overdue-dates.tex")
+sink("generated/overdue-dates.tex")
 cat(dt[type=="past-scheduled", paste0("", format(date, "%Y/%m/%d - "),
                         heading, "\\\\\n")])
 sink()
