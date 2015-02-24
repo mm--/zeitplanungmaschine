@@ -1,0 +1,30 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic);
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 20px 0;
+  color: #111111;
+  font-family: "Montserrat", Impact, sans-serif;
+  line-height: 0.9em;
+  letter-spacing: -0.03em;
+  text-transform: none;
+  text-shadow: none;
+  text-align: center;
+}
+
+h1 {
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7); }
+
+div,
+span {
+    font-family: "Montserrat", Impact, sans-serif;
+}
+
+div {
+    text-align: center;
+}
