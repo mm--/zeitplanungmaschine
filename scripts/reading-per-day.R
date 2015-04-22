@@ -17,6 +17,9 @@ reading[, list(startDate=min(Date), endDate=max(Date), totalPages=sum(NumPages))
 (weekly.reading <- reading[Week==format(Sys.time(), "%Y-%W"),sum(NumPages)])
 (monthly.reading <- reading[Month==format(Sys.time(), "%Y-%m"),sum(NumPages)])
 
+ggplot(reading[Month==format(Sys.time(), "%Y-%m")], aes(x = Date, y = NumPages, group = Book, color = BookTrim)) + geom_point()
+ggsave("generated/reading.png")
+
 ## Number of pages for this week
 sink("generated/reading-output.tex")
 cat("\\def\\weeklyreading{", weekly.reading, "}\n")

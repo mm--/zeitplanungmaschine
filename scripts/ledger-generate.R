@@ -18,6 +18,7 @@ dt[,Date:=as.Date(DateString)]
 blah <- dt[order(Date)][,list(Date, cumulative = -cumsum(Amount))]
 
 ggplot(blah, aes(x = Date, y = cumulative)) + geom_line()
+ggsave("generated/ledger.png")
 
 ledgerToDT <- function(command) {
     ledger.out <- system(command, intern = TRUE)
